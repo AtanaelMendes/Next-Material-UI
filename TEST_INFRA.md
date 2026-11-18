@@ -1,5 +1,7 @@
 # Test Infrastructure Architecture & Specifications
 
+> **Nota (v0.1.0):** a suíte Playwright está em `apps/docs/tests` e roda com cwd em `apps/docs` (a raiz do repositório é resolvida como `../..`). Testes unitários da biblioteca usam Vitest + React Testing Library em `packages/ui`. Os caminhos `src/...` abaixo são históricos.
+
 ## 1. Overview & Principles
 
 The test infrastructure for `next16-template` is built on **Playwright Test** (`@playwright/test`), tailored for Next.js 16 (App Router, Turbopack, React 19).

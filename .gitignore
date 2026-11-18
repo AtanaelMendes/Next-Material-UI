@@ -2,6 +2,7 @@
 
 # dependencies
 /node_modules
+**/node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -12,13 +13,21 @@
 
 # testing
 /coverage
+**/coverage
 
 # next.js
 /.next/
+**/.next/
 /out/
+**/out/
 
 # production
 /build
+**/build
+# library build output
+packages/ui/dist
+/.pack-test
+**/dist
 
 # misc
 .DS_Store
@@ -41,4 +50,6 @@ yarn-error.log*
 next-env.d.ts
 playwright-report/*
 test-results/*
+**/playwright-report/*
+**/test-results/*
 playwright-report/index.html

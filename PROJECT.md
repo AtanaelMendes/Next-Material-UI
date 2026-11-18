@@ -1,5 +1,7 @@
 # Project: next16-template Production Upgrade
 
+> **Nota (v0.1.0):** o projeto foi convertido em um monorepo npm workspaces. A aplicação Next.js está em `apps/docs`, os componentes reutilizáveis em `packages/ui` (`@atanael/ui`) e o harness Vite em `apps/playground`. Os caminhos `src/...` citados abaixo descrevem o layout histórico anterior à extração da biblioteca; consulte `README.md` e `docs/MAINTENANCE.md` para a estrutura atual.
+
 ## Architecture
 
 The project is built on **Next.js 16.4.6** (App Router, Turbopack, React 19.3.0, Tailwind CSS 4.3.3).

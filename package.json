@@ -1,32 +1,35 @@
 {
-  "name": "next16-template",
+  "name": "next16-ui-monorepo",
   "version": "0.1.0",
   "private": true,
+  "description": "Monorepo for @atanael/ui, its Next.js documentation app and Vite playground.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "test": "playwright test",
-    "test:e2e": "playwright test",
-    "test:report": "playwright show-report"
-  },
-  "dependencies": {
-    "@fortawesome/free-regular-svg-icons": "^7.3.1",
-    "@fortawesome/free-solid-svg-icons": "^7.3.1",
-    "@fortawesome/react-fontawesome": "^3.5.0",
-    "flag-icons": "^7.6.0",
-    "moment": "^2.31.0",
-    "next": "16.4.6",
-    "react": "19.3.0",
-    "react-dom": "19.3.0",
-    "react-toastify": "^11.2.0",
-    "suneditor": "^2.47.12",
-    "suneditor-react": "^3.6.1"
+    "dev": "npm run dev -w @atanael/docs",
+    "dev:docs": "npm run dev -w @atanael/docs",
+    "dev:playground": "npm run dev -w @atanael/playground",
+    "build": "npm run build -w @atanael/ui && npm run build -w @atanael/docs",
+    "build:ui": "npm run build -w @atanael/ui",
+    "lint": "eslint .",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test:unit && npm run test:e2e",
+    "test:unit": "npm run test:unit -w @atanael/ui",
+    "test:e2e": "npm run test:e2e -w @atanael/docs",
+    "pack:verify": "node scripts/verify-pack.mjs"
   },
   "devDependencies": {
-    "@playwright/test": "^1.65.0",
-    "@tailwindcss/turbopack": "4.3.3",
-    "babel-plugin-react-compiler": "1.0.0",
-    "tailwindcss": "4.3.3"
+    "@eslint/js": "^9.28.0",
+    "eslint": "^9.28.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.2.0",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.33.1"
+  },
+  "engines": {
+    "node": ">=20.9.0"
   }
 }

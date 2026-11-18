@@ -1,5 +1,7 @@
 # Test Execution Readiness Summary
 
+> **Nota (v0.1.0):** execute os testes a partir da raiz com `npm run test:unit` (Vitest) e `npm run test:e2e` (Playwright). Os comandos `npx playwright ...` abaixo devem ser executados dentro de `apps/docs`. Total atual: 27 testes unitários + 46 testes E2E (2 projetos).
+
 **Status**: READY FOR TEST EXECUTION  
 **Test Framework**: Playwright Test (`@playwright/test` v1.65.0)  
 **Target Environments**: Desktop Chrome (`chromium`), Mobile Chrome (`mobile-chrome` viewport 375x667)
