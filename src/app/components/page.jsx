@@ -7,7 +7,9 @@ import Link from 'next/link';
 import Button from '@/components/ui/buttons/Button';
 import ButtonGroup from '@/components/ui/buttons/ButtonGroup';
 import ButtonToggle from '@/components/ui/buttons/ButtonToggle';
+import WhatsappButton from '@/components/ui/buttons/WhatsappButton';
 import { FabCancel, FabSave } from '@/components/ui/buttons/FloatActionButton';
+import FloatActionButtonExpandable from '@/components/ui/buttons/FloatActionButtonExpandable';
 import PillsBadge from '@/components/ui/buttons/PillsBadge';
 import Card, { CardTitle, CardBody, CardActions } from '@/components/ui/cards/Card';
 import Accordion from '@/components/ui/display/Accordion';
@@ -57,13 +59,13 @@ const Section = ({ id, title, description, children }) => (
   </section>
 );
 
-const SubSection = ({ title, children }) => (
+const SubSection = ({ title, children, allowOverflow = false }) => (
   <div className="mb-8">
     <h3 className="mb-3 text-lg font-semibold text-content-secondary dark:text-gray-200 flex items-center gap-2">
       <span className="w-1 h-5 bg-blue-500 rounded-full inline-block" />
       {title}
     </h3>
-    <div className="rounded-xl border border-border bg-surface shadow-sm overflow-hidden dark:border-slate-700 dark:bg-slate-900">
+    <div className={`rounded-xl border border-border bg-surface shadow-sm ${allowOverflow ? 'overflow-visible' : 'overflow-hidden'} dark:border-slate-700 dark:bg-slate-900`}>
       <div className="p-5">{children}</div>
     </div>
   </div>
@@ -197,8 +199,8 @@ export default function ComponentsPage() {
   const [confirmVisible, setConfirmVisible] = useState(false);
   const [confirmResult, setConfirmResult] = useState(null);
   const [balloonVisible, setBalloonVisible] = useState(true);
-  const [toggleA, setToggleA] = useState(false);
-  const [toggleB, setToggleB] = useState(true);
+  const [toggleChecked, setToggleChecked] = useState(false);
+  const handleToggleChange = (id, value, checked) => setToggleChecked(checked);
   const [checkA, setCheckA] = useState(false);
   const [checkB, setCheckB] = useState(true);
   const [radioVal, setRadioVal] = useState('opt2');
@@ -207,6 +209,8 @@ export default function ComponentsPage() {
   const [selectVal, setSelectVal] = useState('');
   const [leftOpen, setLeftOpen] = useState(false);
   const [rightOpen, setRightOpen] = useState(false);
+  const [playgroundLeftOpen, setPlaygroundLeftOpen] = useState(false);
+  const [playgroundRightOpen, setPlaygroundRightOpen] = useState(false);
   const [paginationData] = useState(Array.from({ length: 47 }, (_, i) => ({ id: i + 1, name: `Item ${i + 1}` })));
   const [sortedData, setSortedData] = useState(MOCK_TABLE_DATA);
   const [activeTab, setActiveTab] = useState('tab1');
@@ -310,7 +314,33 @@ export default function ComponentsPage() {
               </div>
             </SubSection>
 
-            <SubSection title="ButtonGroup">
+            <SubSection title="WhatsappButton" allowOverflow>
+              <p className="mb-5 text-sm text-content-secondary">
+                Abre uma conversa no WhatsApp em uma nova aba. Os números abaixo são fictícios, apenas para demonstração.
+              </p>
+              <div className="flex flex-wrap items-center gap-8">
+                <div className="flex items-center gap-3">
+                  <WhatsappButton nrTelefone="(11) 90000-0000" tooltip="Abrir WhatsApp (exemplo)" />
+                  <span className="text-sm text-content-secondary">Padrão com tooltip</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <WhatsappButton nrTelefone="5511900000000" small tooltip="Abrir WhatsApp compacto (exemplo)" />
+                  <span className="text-sm text-content-secondary">Compacto (small)</span>
+                </div>
+              </div>
+              <CodeSnippet code={`import WhatsappButton from '@/components/ui/buttons/WhatsappButton';
+
+<WhatsappButton nrTelefone="(11) 90000-0000" tooltip="Abrir WhatsApp" />
+<WhatsappButton nrTelefone="5511900000000" small tooltip="Abrir WhatsApp" />`} />
+              <PropTable props={[
+                { name: 'nrTelefone', type: 'string', desc: 'Telefone de destino. Remove a formatação e acrescenta 55 quando o número não começa com esse prefixo.' },
+                { name: 'small', type: 'boolean', default: 'false', desc: 'Exibe o botão em tamanho compacto.' },
+                { name: 'tooltip', type: 'string', desc: 'Texto exibido ao passar o mouse ou focar o link.' },
+                { name: 'className', type: 'string', desc: 'Classes adicionais aplicadas ao contêiner do botão.' },
+              ]} />
+            </SubSection>
+
+            <SubSection title="ButtonGroup" allowOverflow>
               <ButtonGroup buttons={[
                 { id: 'g1', label: 'Editar', tooltip: 'Editar registro', onclick: () => alert('Editar') },
                 { id: 'g2', label: 'Excluir', tooltip: 'Excluir registro', onclick: () => alert('Excluir') },
@@ -325,29 +355,33 @@ export default function ComponentsPage() {
             <SubSection title="ButtonToggle (switch)">
               <div className="flex flex-wrap gap-6 items-center">
                 <ButtonToggle
-                  id="toggle-a" primary label="Ativo" checked={toggleA}
-                  onChange={(id, val, checked) => setToggleA(checked)}
+                  id="toggle-a" primary label="Ativo" checked={toggleChecked}
+                  onChange={handleToggleChange}
                 />
                 <ButtonToggle
-                  id="toggle-b" success label="Habilitado" checked={toggleB}
-                  onChange={(id, val, checked) => setToggleB(checked)}
+                  id="toggle-b" success label="Habilitado" checked={toggleChecked}
+                  onChange={handleToggleChange}
                 />
                 <ButtonToggle
                   id="toggle-c" danger labelOn="Ligado" LabelOff="Desligado"
-                  checked={toggleA} onChange={(id, val, checked) => setToggleA(checked)}
+                  checked={toggleChecked} onChange={handleToggleChange}
                 />
                 <ButtonToggle
-                  id="toggle-d" warning label="Aviso" checked={false}
-                  onChange={() => {}}
+                  id="toggle-d" warning label="Aviso" checked={toggleChecked}
+                  onChange={handleToggleChange}
+                />
+                <ButtonToggle
+                  id="toggle-e" primary label="Desabilitado" checked={toggleChecked}
+                  onChange={handleToggleChange} disabled
                 />
               </div>
               <div className="mt-2 text-xs text-content-muted">
-                Estado A: <strong>{toggleA ? 'ON' : 'OFF'}</strong> | Estado B: <strong>{toggleB ? 'ON' : 'OFF'}</strong>
+                Estado compartilhado: <strong>{toggleChecked ? 'ON' : 'OFF'}</strong>
               </div>
               <CodeSnippet code={`<ButtonToggle
   id="meu-toggle" primary label="Ativo"
   checked={checked} onChange={(id, val, isChecked) => setChecked(isChecked)}
-/>`} />
+/>\n<ButtonToggle\n  id="toggle-desabilitado" primary label="Desabilitado"\n  checked={checked} disabled\n/>`} />
               <PropTable props={[
                 { name: 'id', type: 'string', desc: 'ID único do input' },
                 { name: 'checked', type: 'boolean', desc: 'Estado do toggle' },
@@ -378,6 +412,28 @@ export default function ComponentsPage() {
 
 <FabSave onClick={handleSave} />
 <FabCancel onClick={handleCancel} />`} />
+            </SubSection>
+
+            <SubSection title="FloatActionButtonExpandable">
+              <p className="mb-4 text-sm text-content-secondary">
+                Clique no botão + para expandir as ações de telefone, mensagem e e-mail. Clique no X para recolher. As ações exibem alertas de demonstração.
+              </p>
+              <div className="relative h-72 rounded-xl border border-border bg-surface-muted">
+                <span className="absolute left-3 top-3 text-xs text-content-muted">Demonstração interativa</span>
+                <FloatActionButtonExpandable absolute />
+              </div>
+              <CodeSnippet code={`import FloatActionButtonExpandable from '@/components/ui/buttons/FloatActionButtonExpandable';
+
+// Fixo no canto inferior direito da tela.
+<FloatActionButtonExpandable />
+
+// Posicionado dentro de um contêiner.
+<div className="relative h-72">
+  <FloatActionButtonExpandable absolute />
+</div>`} />
+              <PropTable props={[
+                { name: 'absolute', type: 'boolean', default: 'false', desc: 'Posiciona o botão dentro de um ancestral com position: relative. Por padrão, fica fixo na tela.' },
+              ]} />
             </SubSection>
           </Section>
 
@@ -765,12 +821,14 @@ import PageTabs from '@/components/ui/navigation/PageTabs';
           ══════════════════════════════════════════════════════════════════ */}
           <Section id="overlays" title="🪟 Overlays" description="src/components/ui/overlays/ — Tooltip, Balloon, Confirm, Dialog.">
 
-            <SubSection title="TooltipComponent">
-              <div className="flex flex-wrap gap-6 items-center py-4">
+            <SubSection title="TooltipComponent" allowOverflow>
+              <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 {(['top', 'bottom', 'left', 'right']).map(side => (
-                  <TooltipComponent key={side} content={`Tooltip ${side}`} side={side}>
-                    <Button buttonType="primary" size="small">{side}</Button>
-                  </TooltipComponent>
+                  <div key={side} className="flex min-h-32 items-center justify-center rounded-lg border border-border bg-surface-secondary">
+                    <TooltipComponent content={`Tooltip ${side}`} side={side}>
+                      <Button buttonType="primary" size="small">{side}</Button>
+                    </TooltipComponent>
+                  </div>
                 ))}
               </div>
               <CodeSnippet code={`<TooltipComponent content="Meu tooltip" side="top">
@@ -784,17 +842,22 @@ import PageTabs from '@/components/ui/navigation/PageTabs';
             </SubSection>
 
             <SubSection title="Balloon">
-              <div className="flex gap-3 items-center">
-                <Button buttonType="primary" size="small" onClick={() => setBalloonVisible(v => !v)}>
-                  {balloonVisible ? 'Ocultar' : 'Mostrar'} Balloon
-                </Button>
-                <Balloon visible={balloonVisible} color="primary" placement="bottom">
-                  Conteúdo dinâmico do Balloon
-                </Balloon>
+              <div className="flex min-h-40 items-start justify-center rounded-lg border border-border bg-surface-secondary pt-6">
+                <div className="relative inline-flex items-center">
+                  <Button buttonType="primary" size="small" onClick={() => setBalloonVisible(v => !v)}>
+                    {balloonVisible ? 'Ocultar' : 'Mostrar'} Balloon
+                  </Button>
+                  <Balloon visible={balloonVisible} color="primary" placement="bottom">
+                    Conteúdo dinâmico do Balloon
+                  </Balloon>
+                </div>
               </div>
-              <CodeSnippet code={`<Balloon visible={visible} color="primary" placement="bottom">
-  Meu conteúdo flutuante
-</Balloon>`} />
+              <CodeSnippet code={`<div className="relative inline-flex">
+  <Button onClick={() => setVisible(value => !value)}>Alternar Balloon</Button>
+  <Balloon visible={visible} color="primary" placement="bottom">
+    Meu conteúdo flutuante
+  </Balloon>
+</div>`} />
             </SubSection>
 
             <SubSection title="Confirm Dialog">
@@ -891,23 +954,23 @@ const data = [
             {/* ── Live playground ───────────────────────────────────────────── */}
             <SubSection title="Playground interativo">
               <div className="flex flex-wrap gap-3 mb-4">
-                <Button buttonType="primary" onClick={() => { setLeftOpen(true); setRightOpen(false); }}>
+                <Button buttonType="primary" onClick={() => { setPlaygroundLeftOpen(true); setPlaygroundRightOpen(false); }}>
                   Só Left aberto
                 </Button>
-                <Button buttonType="secondary" onClick={() => { setLeftOpen(false); setRightOpen(true); }}>
+                <Button buttonType="secondary" onClick={() => { setPlaygroundLeftOpen(false); setPlaygroundRightOpen(true); }}>
                   Só Right aberto
                 </Button>
-                <Button buttonType="success" onClick={() => { setLeftOpen(true); setRightOpen(true); }}>
+                <Button buttonType="success" onClick={() => { setPlaygroundLeftOpen(true); setPlaygroundRightOpen(true); }}>
                   Ambos abertos
                 </Button>
-                <Button buttonType="ghost" bordered onClick={() => { setLeftOpen(false); setRightOpen(false); }}>
+                <Button buttonType="ghost" bordered onClick={() => { setPlaygroundLeftOpen(false); setPlaygroundRightOpen(false); }}>
                   Ambos fechados
                 </Button>
               </div>
 
               <div className="relative h-72 rounded-xl overflow-hidden border border-border bg-surface-muted flex dark:border-slate-700 dark:bg-slate-950">
                 {/* Left Drawer (permanent in demo) */}
-                <div className={`bg-blue-700 text-white transition-all duration-300 overflow-hidden ${leftOpen ? 'w-52' : 'w-0'} shrink-0`}>
+                <div id="playground-left-drawer" className={`bg-blue-700 text-white transition-all duration-300 overflow-hidden ${playgroundLeftOpen ? 'w-52' : 'w-0'} shrink-0`}>
                   <div className="p-3">
                     <p className="font-semibold text-sm mb-3">LeftDrawer</p>
                     <nav className="space-y-1">
@@ -931,31 +994,33 @@ const data = [
                 <div className="flex-1 flex flex-col items-center justify-center gap-2 min-w-0">
                   <div className="flex gap-3">
                     <button
-                      onClick={() => setLeftOpen(o => !o)}
+                      onClick={() => setPlaygroundLeftOpen(o => !o)}
                       className="bg-surface border border-border rounded px-2 py-1 text-xs hover:bg-surface-secondary dark:bg-slate-800 dark:border-slate-600 dark:hover:bg-slate-700"
-                      aria-label={leftOpen ? 'Fechar navegação' : 'Abrir navegação'}
-                      aria-expanded={leftOpen}
+                      aria-label={playgroundLeftOpen ? 'Fechar navegação' : 'Abrir navegação'}
+                      aria-expanded={playgroundLeftOpen}
+                      aria-controls="playground-left-drawer"
                     >
-                      ◀ Left {leftOpen ? '(fechar)' : '(abrir)'}
+                      ◀ Left {playgroundLeftOpen ? '(fechar)' : '(abrir)'}
                     </button>
                     <button
-                      onClick={() => setRightOpen(o => !o)}
+                      onClick={() => setPlaygroundRightOpen(o => !o)}
                       className="bg-surface border border-border rounded px-2 py-1 text-xs hover:bg-surface-secondary dark:bg-slate-800 dark:border-slate-600 dark:hover:bg-slate-700"
-                      aria-label={rightOpen ? 'Fechar painel' : 'Abrir painel'}
-                      aria-expanded={rightOpen}
+                      aria-label={playgroundRightOpen ? 'Fechar painel' : 'Abrir painel'}
+                      aria-expanded={playgroundRightOpen}
+                      aria-controls="playground-right-drawer"
                     >
-                      Right {rightOpen ? '(fechar)' : '(abrir)'} ▶
+                      Right {playgroundRightOpen ? '(fechar)' : '(abrir)'} ▶
                     </button>
                   </div>
                   <p className="text-xs text-content-muted">Área de conteúdo principal</p>
                   <div className="flex gap-2 text-xs">
-                    <PillsBadge type={leftOpen ? 'success' : 'default'}>Left: {leftOpen ? 'open' : 'closed'}</PillsBadge>
-                    <PillsBadge type={rightOpen ? 'primary' : 'default'}>Right: {rightOpen ? 'open' : 'closed'}</PillsBadge>
+                    <PillsBadge type={playgroundLeftOpen ? 'success' : 'default'}>Left: {playgroundLeftOpen ? 'open' : 'closed'}</PillsBadge>
+                    <PillsBadge type={playgroundRightOpen ? 'primary' : 'default'}>Right: {playgroundRightOpen ? 'open' : 'closed'}</PillsBadge>
                   </div>
                 </div>
 
                 {/* Right Drawer (permanent in demo) */}
-                <div className={`bg-gray-800 text-white transition-all duration-300 overflow-hidden ${rightOpen ? 'w-52' : 'w-0'} shrink-0`}>
+                <div id="playground-right-drawer" className={`bg-gray-800 text-white transition-all duration-300 overflow-hidden ${playgroundRightOpen ? 'w-52' : 'w-0'} shrink-0`}>
                   <div className="p-3">
                     <p className="font-semibold text-sm mb-3">RightDrawer</p>
                     <div className="space-y-2">
@@ -972,14 +1037,14 @@ const data = [
                 </div>
               </div>
 
-              <CodeSnippet code={`const [leftOpen, setLeftOpen] = useState(true);
-const [rightOpen, setRightOpen] = useState(false);
+              <CodeSnippet code={`const [playgroundLeftOpen, setPlaygroundLeftOpen] = useState(false);
+const [playgroundRightOpen, setPlaygroundRightOpen] = useState(false);
 
-<LeftDrawer open={leftOpen} onOpenChange={setLeftOpen}
+<LeftDrawer open={playgroundLeftOpen} onOpenChange={setPlaygroundLeftOpen}
   navItems={[{ id: 'home', label: 'Dashboard', href: '/', icon: <HomeIcon /> }]}
 />
 
-<RightDrawer open={rightOpen} onOpenChange={setRightOpen}>
+<RightDrawer open={playgroundRightOpen} onOpenChange={setPlaygroundRightOpen}>
   <DrawerHeader>Painel contextual</DrawerHeader>
   <DrawerContent>Conteúdo dinâmico aqui</DrawerContent>
   <DrawerFooter>Rodapé</DrawerFooter>
@@ -998,6 +1063,8 @@ const [rightOpen, setRightOpen] = useState(false);
                   open={leftOpen}
                   onOpenChange={setLeftOpen}
                   variant="temporary"
+                  storageKey={null}
+                  compactStorageKey={null}
                   items={[
                     { id: 'home', label: 'Dashboard', href: '/', icon: <FontAwesomeIcon icon={faHome} width={16} /> },
                     { id: 'components', label: 'Componentes', href: '/components', icon: <FontAwesomeIcon icon={faCube} width={16} />, active: true },
@@ -1015,7 +1082,7 @@ const [rightOpen, setRightOpen] = useState(false);
                 </Button>
               </div>
               {rightOpen && (
-                <RightDrawer open={rightOpen} onOpenChange={setRightOpen}>
+                <RightDrawer open={rightOpen} onOpenChange={setRightOpen} variant="temporary" storageKey={null}>
                   <DrawerHeader>Painel de Notificações</DrawerHeader>
                   <DrawerContent>
                     <div className="space-y-3">
@@ -1070,19 +1137,21 @@ const [rightOpen, setRightOpen] = useState(false);
             <SubSection title="DrawerToggle">
               <div className="flex gap-4 items-center">
                 <DrawerToggle
-                  open={leftOpen}
-                  onToggle={() => setLeftOpen(o => !o)}
+                  open={playgroundLeftOpen}
+                  onToggle={() => setPlaygroundLeftOpen(o => !o)}
                   side="left"
+                  ariaControls="playground-left-drawer"
                   aria-label="Alternar navegação lateral"
                 />
                 <span className="text-sm text-content-secondary">
-                  DrawerToggle (side=left) — estado: <strong>{leftOpen ? 'aberto' : 'fechado'}</strong>
+                  DrawerToggle (side=left) — estado no playground: <strong>{playgroundLeftOpen ? 'aberto' : 'fechado'}</strong>
                 </span>
               </div>
               <CodeSnippet code={`<DrawerToggle
-  open={leftOpen}
-  onToggle={() => setLeftOpen(o => !o)}
+  open={playgroundLeftOpen}
+  onToggle={() => setPlaygroundLeftOpen(o => !o)}
   side="left"
+  ariaControls="playground-left-drawer"
   aria-label="Alternar navegação"
 />`} />
               <PropTable props={[

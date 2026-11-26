@@ -2,7 +2,7 @@ import { faMailBulk, faMessage, faPhone, faPlus, faX } from '@fortawesome/free-s
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useState } from 'react';
 
-const FloatActionButtonExpandable = () => {
+const FloatActionButtonExpandable = ({ absolute = false }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const toggleExpand = () => {
@@ -10,22 +10,28 @@ const FloatActionButtonExpandable = () => {
     };
 
     return (
-        <div className="fixed bottom-4 right-4 flex flex-col items-end space-y-2">
+        <div className={`${absolute ? 'absolute' : 'fixed'} bottom-4 right-4 flex flex-col items-end space-y-2`}>
             {isExpanded && (
                 <>
                     <button
+                        type="button"
+                        aria-label="Telefone"
                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out"
                         onClick={() => alert('Chat clicked!')}
                     >
                         <FontAwesomeIcon icon={faPhone} width="16" height="16" />
                     </button>
                     <button
+                        type="button"
+                        aria-label="Mensagem"
                         className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out"
                         onClick={() => alert('Phone clicked!')}
                     >
                         <FontAwesomeIcon icon={faMessage} width="16" height="16" />
                     </button>
                     <button
+                        type="button"
+                        aria-label="E-mail"
                         className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full shadow-lg transition duration-300 ease-in-out"
                         onClick={() => alert('Email clicked!')}
                     >
@@ -34,6 +40,9 @@ const FloatActionButtonExpandable = () => {
                 </>
             )}
             <button
+                type="button"
+                aria-label={isExpanded ? 'Recolher ações' : 'Expandir ações'}
+                aria-expanded={isExpanded}
                 onClick={toggleExpand}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 rounded-full shadow-lg transition duration-300 ease-in-out"
             >

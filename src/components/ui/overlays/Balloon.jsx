@@ -52,30 +52,28 @@ const Balloon = ({ visible, reload, placement = 'bottom', color = 'default', chi
     // Classes para placement
     const placementClasses = {
         bottom: {
-            balloon: 'bottom-[-50px]',
-            caret: 'top-[-20px] border-l-[10px] border-r-[10px] border-b-[10px] border-l-transparent border-r-transparent border-b-${color} -mb-[2px] left-[calc(50%_-_10px)]'
+            balloon: 'top-full left-1/2 -translate-x-1/2 mt-3',
+            caret: 'bottom-full left-1/2 -translate-x-1/2 translate-y-1/2 border-t border-l'
         },
         top: {
-            balloon: 'top-[-50px]',
-            caret: 'bottom-[-20px] border-l-[10px] border-r-[10px] border-t-[10px] border-l-transparent border-r-transparent border-t-${color} -mt-[2px] left-[calc(50%_-_10px)]'
+            balloon: 'bottom-full left-1/2 -translate-x-1/2 mb-3',
+            caret: 'top-full left-1/2 -translate-x-1/2 -translate-y-1/2 border-b border-r'
         },
         left: {
-            balloon: 'left-[-50px]',
-            caret: 'right-[-20px] border-t-[10px] border-b-[10px] border-l-[10px] border-t-transparent border-b-transparent border-l-${color} -mr-[2px] top-[calc(50%_-_10px)]'
+            balloon: 'right-full top-1/2 -translate-y-1/2 mr-3',
+            caret: 'left-full top-1/2 -translate-y-1/2 -translate-x-1/2 border-t border-r'
         },
         right: {
-            balloon: 'right-[-50px]',
-            caret: 'left-[-20px] border-t-[10px] border-b-[10px] border-r-[10px] border-t-transparent border-b-transparent border-r-${color} -ml-[2px] top-[calc(50%_-_10px)]'
+            balloon: 'left-full top-1/2 -translate-y-1/2 ml-3',
+            caret: 'right-full top-1/2 -translate-y-1/2 translate-x-1/2 border-b border-l'
         }
     };
 
     const currentPlacement = placementClasses[placement] || placementClasses.bottom;
 
     return (
-        <div role="status" className={`absolute ${currentPlacement.balloon} items-center justify-center flex flex-col rounded-lg border border-border ${currentColor.bg} ${currentColor.text} animate-bounce shadow-md ${currentColor.shadow} p-2`}>
-            <div className="relative">
-                <span className={`absolute w-0 h-0 border-solid ${currentPlacement.caret.replace('${color}', currentColor.border)} ${currentColor.dropShadow}`} />
-            </div>
+        <div role="status" className={`absolute z-40 ${currentPlacement.balloon} items-center justify-center flex flex-col rounded-lg border border-border ${currentColor.bg} ${currentColor.text} shadow-md ${currentColor.shadow} p-2`}>
+            <span aria-hidden="true" className={`absolute h-2 w-2 rotate-45 bg-inherit border-border ${currentPlacement.caret}`} />
             <div className="rounded-lg text-nowrap text-sm text-white-shadow">
                 {children}
             </div>

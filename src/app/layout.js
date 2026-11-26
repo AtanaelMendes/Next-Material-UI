@@ -13,8 +13,9 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Next16 Template — Catálogo de Componentes",
-  description: "Template Next.js 16 com biblioteca de componentes acessível e tematizada.",
+  title: "Next Material UI — Template open source",
+  description:
+    "Template open source com Next.js 16, React 19 e Tailwind CSS 4. Componentes próprios inspirados em Material Design, temas claro e escuro e exemplos para começar.",
 };
 
 const themeInitScript = `
