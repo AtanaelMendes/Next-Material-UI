@@ -1,5 +1,9 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+## Playground
+
+Explore the project playground: [next-material-ui-one.vercel.app](https://next-material-ui-one.vercel.app/).
+
 ## Getting Started
 
 First, run the development server:
